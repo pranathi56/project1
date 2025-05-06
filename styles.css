@@ -1,0 +1,132 @@
+/* Set the background image to cover the entire screen */
+body {
+    background-image: url("D:/download.jpeg"); /* Replace 'background.jpg' with your image path */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Make the header text visible against the background */
+header {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Navigation style */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    color: #333;
+}
+
+/* Style for the form sections */
+.glass-box {
+    background: rgba(173, 216, 230, 0.8); /* White with transparency for the glass effect */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    border-bottom: 2px solid #ADD8E6;
+}
+
+/* Layout for the form labels and inputs */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Label on the left, input on the right */
+.form-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+label {
+    flex: 1;
+    text-align: left;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+input, textarea {
+    flex: 7;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Button styling */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items : center;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Style for the water quality monitoring section */
+#water-monitoring {
+    margin-top: 20px;
+}
+
+#waterQualityResult {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Push buttons to opposite ends */
+    margin-top: 20px;
+    width: 100%;
+}
+
+.back-button {
+    background-color: #6c757d;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+.submit-button {
+    background-color: #007BFF;
+    margin-left: auto; /* Push submit button to the right */
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}

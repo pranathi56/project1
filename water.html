@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Monitoring</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .glass-box {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #007BFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Water Quality Monitoring</h1>
+    </header>
+
+    <section id="water-monitoring" class="glass-box">
+        <h2>Enter Water Quality Details</h2>
+        <form id="waterForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phLevel">Enter Water pH Level (1-14):</label>
+                <input type="number" id="phLevel" name="ph_level" min="1" max="14" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <div class="button-container">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="glass-box">
+        <h2>Submitted Water Quality Reports</h2>
+        <table id="waterTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>pH Level</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        // Handle form submission
+        document.getElementById("waterForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+
+            fetch("http://localhost:3000/submit-water-quality", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                loadWaterData(); // Reload table data after submission
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+
+        // Fetch and display data in the table
+        function loadWaterData() {
+            fetch("http://localhost:3000/get-water-data")
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector("#waterTable tbody");
+                tableBody.innerHTML = ""; // Clear existing data
+
+                data.forEach(record => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${record.name}</td>
+                        <td>${record.ph_level}</td>
+                        <td><img src="uploads/${record.image_path}" width="100"></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error("Error loading data:", error));
+        }
+
+        // Load data on page load
+        window.onload = loadWaterData;
+    </script>
+
+</body>
+</html>

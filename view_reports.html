@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #007BFF;
+            color: white;
+        }
+        img {
+            width: 100px;
+            height: auto;
+        }
+        select {
+            padding: 5px;
+        }
+        .back-button {
+            margin: 20px;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Submitted Issues</h1>
+
+    <button class="back-button" onclick="goBack()">← Back</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Issue Type</th>
+                <th>pH Level</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="issuesTable">
+            <tr><td colspan="8">Loading...</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch issues from backend
+        fetch("http://localhost:3000/get-issues")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetched issues:", data); // ✅ Debugging
+                displayIssues(data);
+            })
+            .catch(error => {
+                console.error("Error fetching issues:", error);
+                document.getElementById("issuesTable").innerHTML = `<tr><td colspan="8">Error loading issues. Try again later.</td></tr>`;
+            });
+
+        function displayIssues(issues) {
+            const tableBody = document.getElementById("issuesTable");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            issues.forEach(issue => {
+                const row = `<tr>
+                    <td>${issue.id}</td>
+                    <td>${issue.name}</td>
+                    <td>${issue.email}</td>
+                    <td>${issue.issue_type}</td>
+                    <td>${issue.ph_level !== null ? issue.ph_level : "N/A"}</td>
+                    <td>${issue.issue_description !==null?issue.issue_description :"No Description"}</td>
+                    <td>${issue.image_path ? `<img src="http://localhost:3000${issue.image_path}" alt="Issue Image">` : "No Image"}</td>
+                    <td>
+                        <select onchange="updateStatus(${issue.id}, this.value)">
+                            <option value="Pending" ${issue.status === "Pending" ? "selected" : ""}>Pending</option>
+                            <option value="Resolved" ${issue.status === "Resolved" ? "selected" : ""}>Resolved</option>
+                        </select>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Function to update status in backend
+        function updateStatus(issueId, newStatus) {
+            fetch("http://localhost:3000/update-status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: issueId, status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(`✅ Status updated for issue ID ${issueId}`);
+                } else {
+                    alert("❌ Error updating status: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("❌ Error updating status:", error);
+                alert("❌ Failed to update status. Try again later.");
+            });
+        }
+
+        // Function for back button
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+</html>

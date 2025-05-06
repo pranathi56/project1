@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Issues Tracking System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 50px;
+        }
+        .floating-box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            width: 250px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .floating-box h2 {
+            margin-bottom: 10px;
+        }
+        .floating-box a {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            background: #007BFF;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Voluntary Village Issues Tracking System</h1>
+    </header>
+    
+    <div class="container">
+        <div class="floating-box">
+            <h2>Report an Issue</h2>
+            <p>Click below to report an issue in your village.</p>
+            <a href=report.html>Report Now</a>
+        </div>
+       
+        <div class="floating-box">
+            <h2>View Reports</h2>
+            <p>See the reported issues and their status.</p>
+            <a href=view_reports.html>View Reports</a>
+        </div>
+    </div>
+</body>
+</html>

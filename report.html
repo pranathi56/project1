@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Village Issues Tracking System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .glass-box {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-button {
+            background-color: #6c757d;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Voluntary Village Issues Tracking System</h1>
+    </header>
+    
+    <section id="issue-form" class="glass-box">
+        <h2>Report an Issue</h2>
+        <form id="complaintForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="issue_type">Issue Type:</label>
+                <select id="issue_type" name="issue_type" required>
+                    <option value="" disabled selected>Select Issue Type</option>
+                    <option value="Water">Water</option>
+                    <option value="Drainage">Drainage</option>
+                    <option value="Waste Disposal">Waste Disposal</option>
+                    <option value="Electricity">Electricity</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div class="form-group hidden" id="ph_level_group">
+                <label for="ph_level">pH Level:</label>
+                <select id="ph_level" name="ph_level">
+                    <option value="" disabled selected>Select pH Level</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                </select>
+            </div>
+            <div class="form-group" id="issue_description_group">
+                <label for="issue_description">Issue Description:</label>
+                <textarea id="issue_description" name="issue_description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="button-container">
+                <button type="button" class="back-button" onclick="goBack()">Back</button>
+                <button type="submit">Submit Issue</button>
+            </div>
+        </form>
+    </section>
+
+    <script>
+        // Handle dropdown selection for issue type
+        document.getElementById("issue_type").addEventListener("change", function () {
+            const issueType = this.value;
+            const phLevelGroup = document.getElementById("ph_level_group");
+
+            // Show pH Level only for "Water"
+            if (issueType === "Water") {
+                phLevelGroup.classList.remove("hidden");
+            } else {
+                phLevelGroup.classList.add("hidden");
+            }
+        });
+
+        // Handle form submission
+        document.getElementById("complaintForm").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent page reload
+
+            const formData = new FormData(event.target);
+
+            // Ensure hidden fields are included in submission
+            if (document.getElementById("ph_level_group").classList.contains("hidden")) {
+                formData.append("ph_level", "");
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/submit-issue", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+                console.log("Response from server:", result);
+                alert(result.message);
+            } catch (error) {
+                console.error("Error submitting issue:", error);
+                alert("Failed to submit issue.");
+            }
+        });
+
+        // Function for the "Back" button
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    
+</body>
+</html>
